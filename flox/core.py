@@ -2194,7 +2194,7 @@ def _choose_engine(by, agg: Aggregation):
     not_arg_reduce = not _is_arg_reduction(agg)
 
     if agg.name in ["quantile", "nanquantile", "median", "nanmedian"]:
-        logger.info(f"_choose_engine: Choosing 'flox' since {agg.name}")
+        logger.debug(f"_choose_engine: Choosing 'flox' since {agg.name}")
         return "flox"
 
     # numbagg only supports nan-skipping reductions
@@ -2206,14 +2206,14 @@ def _choose_engine(by, agg: Aggregation):
         if agg.name in ["all", "any"] or (
             not_arg_reduce and has_blockwise_nan_skipping and dtype is None
         ):
-            logger.info("_choose_engine: Choosing 'numbagg'")
+            logger.debug("_choose_engine: Choosing 'numbagg'")
             return "numbagg"
 
     if not_arg_reduce and (not is_duck_dask_array(by) and _issorted(by)):
-        logger.info("_choose_engine: Choosing 'flox'")
+        logger.debug("_choose_engine: Choosing 'flox'")
         return "flox"
     else:
-        logger.info("_choose_engine: Choosing 'numpy'")
+        logger.debug("_choose_engine: Choosing 'numpy'")
         return "numpy"
 
 
