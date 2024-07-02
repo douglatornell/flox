@@ -2165,24 +2165,24 @@ def _choose_method(
     method: T_MethodOpt, preferred_method: T_Method, agg: Aggregation, by, nax: int
 ) -> T_Method:
     if method is None:
-        logger.info("_choose_method: method is None")
+        logger.debug("_choose_method: method is None")
         if agg.chunk == (None,):
             if preferred_method != "blockwise":
                 raise ValueError(
                     f"Aggregation {agg.name} is only supported for `method='blockwise'`, "
                     "but the chunking is not right."
                 )
-            logger.info("_choose_method: choosing 'blockwise'")
+            logger.debug("_choose_method: choosing 'blockwise'")
             return "blockwise"
 
         if nax != by.ndim:
-            logger.info("_choose_method: choosing 'map-reduce'")
+            logger.debug("_choose_method: choosing 'map-reduce'")
             return "map-reduce"
 
         if _is_arg_reduction(agg) and preferred_method == "blockwise":
             return "cohorts"
 
-        logger.info("_choose_method: choosing preferred_method={}".format(preferred_method))  # noqa
+        logger.debug("_choose_method: choosing preferred_method={}".format(preferred_method))  # noqa
         return preferred_method
     else:
         return method
